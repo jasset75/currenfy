@@ -34,8 +34,7 @@ class BookedTrades(models.Model):
 
     def __str__(self):
         return '{}'.format(self.ID)
-
-
+        
 # This mechanism allow generate unique IDs for each currency trading exchange
 @receiver(pre_save, sender=BookedTrades)
 def booked_trades_pre_save_handler(sender, instance, *args, **kwargs):
@@ -56,4 +55,5 @@ def booked_trades_pre_save_handler(sender, instance, *args, **kwargs):
                     collision = False
                 if not collision:
                     instance.ID = id_candidate
-
+    # consistency asurance    
+    instance.buy_amount = instance.sell_amount * instance.rate
