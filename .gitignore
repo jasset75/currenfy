@@ -2,7 +2,7 @@
 
 .code/
 media
-settings.py
+/settings.py
 db.sqlite3
 *.log
 *.pot
