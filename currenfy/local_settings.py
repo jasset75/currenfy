@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'trader.apps.TraderConfig',
-    'booked.apps.BookedConfig'
+    'booked.apps.BookedConfig',
+    'api.apps.ApiConfig'
 ]
 
 MIDDLEWARE = [
