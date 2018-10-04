@@ -1,4 +1,5 @@
-import string, random
+import string
+import random
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
@@ -11,10 +12,10 @@ MAX_AMOUNT_LEN = 11
 # identifier generator to identify Booked Trades
 def g_identifier():
     """
-        Generates an unique identifier based on random ID_LENGTH length word
+        Generates an unique identifier based on a random word of ID_LENGTH in length
     """
     return ID_HEADER + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(ID_LENGTH))
-    
+
 
 # Booked Trades of foreign exchange
 class BookedTrades(models.Model):
@@ -34,7 +35,8 @@ class BookedTrades(models.Model):
 
     def __str__(self):
         return '{}'.format(self.ID)
-        
+
+
 # This mechanism allow generate unique IDs for each currency trading exchange
 @receiver(pre_save, sender=BookedTrades)
 def booked_trades_pre_save_handler(sender, instance, *args, **kwargs):
@@ -47,13 +49,11 @@ def booked_trades_pre_save_handler(sender, instance, *args, **kwargs):
             with transaction.atomic():
                 try:
                     collision = (
-                        sender.objects
-                            .select_for_update()
-                            .get(ID=id_candidate)
+                        sender.objects.select_for_update().get(ID=id_candidate)
                     )
-                except BookedTrades.DoesNotExist: # ID exists
+                except BookedTrades.DoesNotExist:  # ID exists
                     collision = False
                 if not collision:
                     instance.ID = id_candidate
-    # consistency asurance    
+    # consistency asurance
     instance.buy_amount = instance.sell_amount * instance.rate
