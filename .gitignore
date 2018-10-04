@@ -1,6 +1,6 @@
 # Django
 
-.code/
+.vscode/
 media
 /settings.py
 db.sqlite3
