@@ -3,8 +3,8 @@ from booked.models import BookedTrades
 from booked.models import ID_HEADER, ID_LENGTH
 
 
-# Basic CRUD tests
-class CrudTest(TestCase):
+# Basic CRU tests
+class CruTest(TestCase):
 
     def check_id(self, id):
         # checks if exists
