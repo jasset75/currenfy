@@ -17,14 +17,3 @@ class BookedTradesSerializer(serializers.Serializer):
         Create and return a new `BookedTrades` instance, given the validated data.
         """
         return BookedTrades.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        """
-        Update and return an existing `BookedTrades` instance, given the validated data.
-        """
-        instance.sell_currency = validated_data.get('sell_currency', instance.sell_currency)
-        instance.sell_amount = validated_data.get('sell_amount', instance.sell_amount)
-        instance.buy_currency = validated_data.get('buy_currency', instance.buy_currency)
-        instance.rate = validated_data.get('rate', instance.rate)
-        instance.save()
-        return instance

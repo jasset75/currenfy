@@ -44,6 +44,7 @@ class CruTest(TestCase):
             rate=1.14
         )
         btr.save()
+        
         # checks __str__ is ID
         self.assertEqual(str(btr), btr.ID)
         # checks if trade have been correctly calculated

@@ -131,5 +131,7 @@ STATIC_URL = '/static/'
 
 FIXER_IO = {
     'API_KEY': "4e293c2884ab9fb390d3de2712591598",
-    'LATEST_URL': "http://data.fixer.io/api/latest?access_key={}&format=1"
+    'LATEST_URL': "http://data.fixer.io/api/latest?access_key={}&format=1",
+    'LATEST_URL_SYMBOLS': "http://data.fixer.io/api/latest?access_key={}&format=1&symbols={}",
+    'SYMBOLS_URL': "http://data.fixer.io/api/symbols?access_key={}"
 }
