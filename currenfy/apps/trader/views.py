@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def trader(request):
+    return render(request, 'trader/index.html')

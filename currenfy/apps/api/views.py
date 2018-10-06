@@ -26,7 +26,7 @@ class SymbolsView(ListAPIView):
             Returns list of allowed currency symbols.
         """
         
-        renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
+        self.renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
         symbols = Converter.get_symbols()
         content = {
@@ -45,7 +45,7 @@ class RateView(ListAPIView):
             Gets exchange rate between `sell_currency` and `buy_currency`.
         """
         
-        renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
+        self.renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
         if not sell_currency:
             content = {'error': 'Sell currency must be specified.'}

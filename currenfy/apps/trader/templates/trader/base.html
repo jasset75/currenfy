@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block titlte %}{% endblock%}</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'trader/bootstrap-4.0.0-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Currenfy Styles -->
+    <link href="{% static 'trader/css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">{% block header %}{% endblock %}</header>    
+    <div class="wrapper">
+        <div class="push-top"></div>
+
+        {% block content %}{% endblock %}
+  
+    <div class="push-bottom"></div>
+    </div>
+    <footer class="footer">{% block footer %}{% endblock %}</footer>    
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script type="text/javascript" src="{% static 'trader/js/jquery-3.3.1.min.js' %}"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="{% static 'trader/js/popper.min.js' %}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="{% static 'trader/bootstrap-4.0.0-dist/js/bootstrap.min.js' %}"></script>
+</body>
+
+</html>
