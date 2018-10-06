@@ -34,10 +34,17 @@ class Converter():
         return doc['symbols'].keys()
 
     @classmethod
-    def get_rate(cls, sell_currency='EUR', buy_currency='GBP'):
+    def get_rate(cls, sell_currency=None, buy_currency=None):
         """
             get rate conversion from sell_currency to buy_currency
         """
+        if not sell_currency:  # pragma: no cover
+            raise Exception('Converter :: `sell_currency` parameter required.')
+
+        if not buy_currency:  # pragma: no cover
+            raise Exception('Converter :: `buy_currency` parameter required.')
+
+        # url endpoint assambly
         latest_url = cls._latest_base_symbols.format(cls._api_key,
                                                      ', '.join([sell_currency, buy_currency]))
         # gets EUR exchange rates in json format
@@ -50,7 +57,7 @@ class Converter():
 
         # checks if base currency is the expected
         base = doc.get('base', None)
-        if base != 'EUR':  # pragma: no cover
+        if base != settings.BASE_CURRENCY:  # pragma: no cover
             raise Exception('Converter :: Base "{}" currency not expected.'.format(base))
         
         # checks if exists rates
@@ -68,11 +75,13 @@ class Converter():
         if not buy_rate:  # pragma: no cover
             raise Exception('Converter :: Buy rate exchange for "{}" currency not found.'.format(sell_currency))
 
-        if sell_currency == 'EUR':  # buy_rate is already in the base currency
-            return buy_rate
-        elif buy_currency == 'EUR':  # base currency is the buyer, buy_rate is 1
-            return 1/sell_rate
+        # rate calculation
+        if sell_currency == settings.BASE_CURRENCY:  # buy_rate is already in the base currency
+            exchange_rate = buy_rate
+        elif buy_currency == settings.BASE_CURRENCY:  # base currency is the buyer, buy_rate is 1
+            exchange_rate = 1/sell_rate
         else:
-            return sell_rate*buy_rate # sell and buy currencies are not the base currency
+            exchange_rate = sell_rate*buy_rate # sell and buy currencies are not the base currency
 
-
+        # apply rate precision
+        return round(exchange_rate, settings.RATE_DECIMAL_PRECISION)
