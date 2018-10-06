@@ -17,17 +17,32 @@ class BookedTradesSet(viewsets.ModelViewSet):
     serializer_class = BookedTradesSerializer
 
 
+class SymbolsView(ListAPIView):
+    """
+        Implements fixer services interface for booking trades
+    """
+    def get(self, request, format=None):
+        """
+            Returns list of allowed currency symbols.
+        """
+        
+        renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
+
+        symbols = Converter.get_symbols()
+        content = {
+            'symbols': symbols
+        }
+
+        return Response(content, status.HTTP_200_OK)
+
+
 class RateView(ListAPIView):
     """
         Implements fixer services interface for booking trades
     """
-    @classmethod
-    def get_extra_actions(cls):
-        return []
-    
-    def get(self, request, sell_currency='EUR', buy_currency='GBP', format=None):
+    def get(self, request, sell_currency=None, buy_currency=None, format=None):
         """
-            Return a list of all users.
+            Gets exchange rate between `sell_currency` and `buy_currency`.
         """
         
         renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
@@ -44,4 +59,5 @@ class RateView(ListAPIView):
             'buy_currency': buy_currency,
             'rate': rate
         }
+
         return Response(content, status.HTTP_200_OK)
