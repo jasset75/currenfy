@@ -128,7 +128,21 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+"""
+    Project Settings
+"""
 
+# booked trades model
+ID_HEADER = 'TR'
+ID_LENGTH = 7
+MAX_AMOUNT_LEN = 11
+RATE_DECIMAL_PRECISION = 4
+AMOUNT_DECIMAL_PRECISION = 2
+
+# base exchange currency
+BASE_CURRENCY = 'EUR'
+
+# fixer interface settings
 FIXER_IO = {
     'API_KEY': "4e293c2884ab9fb390d3de2712591598",
     'LATEST_URL': "http://data.fixer.io/api/latest?access_key={}&format=1",
