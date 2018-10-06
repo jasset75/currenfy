@@ -1,20 +1,11 @@
 from django.test import TestCase
 from booked.models import BookedTrades
-from booked.models import ID_HEADER, ID_LENGTH
+from django.conf import settings
+from currenfy.common import CurrenfyTest
 
 
 # Basic CRU tests
-class CruTest(TestCase):
-
-    def check_id(self, id):
-        # checks if exists
-        self.assertTrue(id)
-        # checks if alphanumeric
-        self.assertTrue(id.isalnum())
-        # checks has the correct header
-        self.assertEqual(id[:len(ID_HEADER)], ID_HEADER)
-        # checks has the exact length
-        self.assertEqual(len(id), len(ID_HEADER)+ID_LENGTH)
+class CruTest(CurrenfyTest):
 
     def test_insert_booked_trade(self):
         """
