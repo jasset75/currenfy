@@ -3,29 +3,25 @@ import random
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
-
-ID_HEADER = 'TR'
-ID_LENGTH = 7
-MAX_AMOUNT_LEN = 11
-
+from django.conf import settings
 
 # identifier generator to identify Booked Trades
 def g_identifier():
     """
         Generates an unique identifier based on a random word of ID_LENGTH in length
     """
-    return ID_HEADER + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(ID_LENGTH))
+    return settings.ID_HEADER + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(settings.ID_LENGTH))
 
 
 # Booked Trades of foreign exchange
 class BookedTrades(models.Model):
 
-    ID = models.CharField(primary_key=True, max_length=len(ID_HEADER)+ID_LENGTH, verbose_name='Trade Id.')
+    ID = models.CharField(primary_key=True, max_length=len(settings.ID_HEADER)+settings.ID_LENGTH, verbose_name='Trade Id.')
     sell_currency = models.CharField(max_length=3, verbose_name='Sell CCY')
-    sell_amount = models.DecimalField(max_digits=MAX_AMOUNT_LEN, decimal_places=2, verbose_name='Sell Amount')
+    sell_amount = models.DecimalField(max_digits=settings.MAX_AMOUNT_LEN, decimal_places=2, verbose_name='Sell Amount')
     buy_currency = models.CharField(max_length=3, verbose_name='Buy CCY')
-    buy_amount = models.DecimalField(max_digits=MAX_AMOUNT_LEN, decimal_places=2, verbose_name='Buy Amount')
-    rate = models.DecimalField(max_digits=9, decimal_places=4, verbose_name='Rate')
+    buy_amount = models.DecimalField(max_digits=settings.MAX_AMOUNT_LEN, decimal_places=2, verbose_name='Buy Amount')
+    rate = models.DecimalField(max_digits=9, decimal_places=settings.RATE_DECIMAL_PRECISION, verbose_name='Rate')
     date_booked = models.DateTimeField(auto_now_add=True, verbose_name='Date Booked')
 
     class Meta:
