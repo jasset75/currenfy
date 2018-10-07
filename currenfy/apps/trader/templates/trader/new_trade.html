@@ -1,0 +1,226 @@
+{% extends 'trader/base.html' %}
+
+{% block title %}Currenfy | New Trade {% endblock %}
+
+{% block content %}
+<div id='new-trade'>
+    <form id="new-trade-form">
+        <fieldset>
+            <div class="container">
+                {# row header #}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <legend><b>New Trade</b></legend>
+                        <hr class="hr-legend">
+                    </div>
+                </div>
+                {# row 1 #}
+                <div class='row'>
+                    {# row 1 col 1 #}
+                    <div class='col-sm-4'>    
+                        <div class='form-group'>
+                            <label for="sell-currency">Sell Currency</label>
+                            <select
+                                id="sell-currency"
+                                class="form-control currency-selec"
+                                name="sell_currency"
+                                data-source="{% url 'fixer-symbols' %}"
+                                required="true">
+                            </select>
+                        </div>
+                    </div>
+
+                    {# row 1 col 2 #}
+                    <div class='col-sm-4'>    
+                        <div class='form-group'>
+                            <label for="rate">Rate</label>
+                            <input
+                                id="rate"
+                                class="form-control"
+                                name="rate"
+                                data-source="{% url 'fixer-rate' %}"
+                                readonly="true"
+                                required="true">
+                        </div>
+                    </div>
+
+                    {# row 1 col 3 #}
+                    <div class='col-sm-4'>    
+                        <div class='form-group'>
+                            <label for="buy-currency">Buy Currency</label>
+                            <select
+                                id="buy-currency"
+                                class="form-control currency-selec"
+                                name="buy_currency"
+                                data-source="{% url 'fixer-symbols' %}"
+                                required="true">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                {# row 2 #}
+                <div class='row'>
+                    {# row 2 col 1 #}
+                    <div class='col-sm-4'>    
+                        <div class='form-group'>
+                            <label for="sell-amount">Sell Amount</label>
+                            <input
+                                id="sell-amount"
+                                autocomplete="off"
+                                class="form-control"
+                                name="sell_amount"
+                                required="true">
+                        </div>
+                    </div>
+
+                    {# row 2 col 1 #}
+
+                    {# row 2 col 1 #}
+                    <div class='col-sm-4 col-sm-offset-4'>    
+                        <div class='form-group'>
+                            <label for="buy-amount">Buy Amount</label>
+                            <input
+                                id="buy-amount"
+                                class="form-control"
+                                name="buy_amount"
+                                readonly="true"
+                                required="true">
+                        </div>
+                    </div>
+                </div>
+
+                {# row 3#}
+                <div class='row'>
+                    {# row 3 col 1 #}
+                    <div class='col-sm-4'>
+                        <div class='form-group'>
+                            <div>
+                                <button type="submit" id="create-trade-id" class="btn btn-dark">Create</button> 
+                            </div>
+                        </div>
+                    </div>
+            
+                    {# row 3 col 2 #}
+            
+                    {# row 3 col 3 #}
+                    <div class='col-sm-4 col-sm-offset-4'>
+                        <div class='form-group'>
+                            <div>
+                                <button id="cancel-id" class="btn btn-dark">Cancel</button> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts-hook %}
+<script type="text/javascript">
+</script>
+{% endblock scripts-hook %}
+
+{% block document-ready %}
+    {# form validation #}
+    $.validator.addMethod("ccy_currency_validator", function(value, element) {
+
+    }, "Atleast 1 must be selected");
+
+    $( "#new-trade-form" ).validate( {
+        rules: {
+            buy_currency: "required",
+            buy_amount: "required",
+            rate: "required",
+            sell_currency: "required",
+            sell_amount: "required",
+        },
+        messages: {
+            buy_currency: "Buy currency valid symbol required",
+            buy_amount: "Valid number required",
+            rate: "Valid number required",
+            sell_currency: "Sell currency valid symbol required",
+            sell_amount: "Valid number required",
+        },
+        errorElement: "em",
+        errorPlacement: function ( error, element ) {
+            // Add the `help-block` class to the error element
+            error.addClass( "help-block" );
+
+            if ( element.prop( "type" ) === "checkbox" ) {
+                error.insertAfter( element.parent( "label" ) );
+            } else {
+                error.insertAfter( element );
+            }
+        },
+        highlight: function ( element, errorClass, validClass ) {
+            $( element ).parents( ".col-sm-4" ).addClass( "has-error" ).removeClass( "has-success" );
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $( element ).parents( ".col-sm-4" ).addClass( "has-success" ).removeClass( "has-error" );
+        }
+    } );
+
+    {# loads ccy symbols #}
+    $('select[data-source]').each(function() {
+        $select = $(this)
+        getFixerSymbols($select);
+    });
+
+    {# CCY sell and buy on change to get rate #}
+    function rateThis(ccy_sell, ccy_buy) {
+        var re_valid_ccy = /\b[A-Z]{3}\b/;
+
+        if (ccy_sell.match(re_valid_ccy)){
+            if (ccy_buy.match(re_valid_ccy)){
+                getRate($('rate'), ccy_sell, ccy_buy);
+            }
+        }
+    }
+
+    $('#sell-currency').change(function() {
+        rateThis($('#sell-currency').val(), $('#buy-currency').val());
+    });
+
+    $('#buy-currency').change(function() {
+        rateThis($('#sell-currency').val(), $('#buy-currency').val());
+    });
+
+    $('#sell-amount').change(function() {
+        var valueSelected = this.value.replace(',','.');
+        // check if correct        
+        if (valueSelected.match(/^-?\d*(\.\d+)?$/)){
+            alert( JSON.stringify(valueSelected) );
+        } else {
+            alert( 'nope');
+        }
+    });
+
+    {# instantiate action buttons #}
+    $('#cancel-id').click(function (){
+        {# back link to booked trades list #}
+        window.location =  "{% url 'booked_trades_list' %}"
+    });
+
+    $('#create-trade-id')
+        .click(function (){
+            {# send trade to back-end#}
+        });
+
+    {# keys default behavior #}
+    function keyDown(e) {
+        var keyCode = e.keyCode;
+        if (keyCode==13) {
+            $('#create-trade-id').click();
+        } else if (keyCode==27){
+            $('#new-trade-form')[0].reset();            
+            $('#cancel-id').click();
+        }
+    }   
+    document.addEventListener("keydown", keyDown, false);
+
+{% endblock document-ready%}
+
+{% block footer %}Copyright Juan A. Aguilar 2018.{% endblock %}

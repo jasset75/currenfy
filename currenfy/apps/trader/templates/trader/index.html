@@ -2,10 +2,71 @@
 
 {% block title %}Currenfy | Booked Trades {% endblock %}
 
-
 {% block content %}
-<h1>Currenfy rocks!</h1>
+<div>
+    <div 
+        id="booked-trades" 
+        class="container"
+        data-source="{% url 'booked-list' %}">
+        {# row header #}
+        <div class="row">
+            <div class="col-sm-12">
+                <legend><b>Booked Trades</b></legend>
+                <hr class="hr-legend">
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-sm-2 col-sm-pull-10">
+                <button id="new-trade-id" class="btn btn-dark">New Trade</button> 
+            </div>
+        </div>
+        <div class="rule"></div>
+        <div class="row booked-trade-header">
+            <div class="col-sm-2">
+            Sell CCY
+            </div>
+            <div class="col-sm-2">
+            Sell Amount
+            </div>
+            <div class="col-sm-2">
+            Buy CCY
+            </div>
+            <div class="col-sm-2">
+            Buy Amount
+            </div>
+            <div class="col-sm-2">
+            Rate
+            </div>
+            <div class="col-sm-2">
+            Date Booked
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
+{% block scripts-hook %}
+<script type="text/javascript">
+    // alert('checkpoint 1')
+</script>
+{% endblock scripts-hook %}
 
-{% block footer %}Copyright Juan A. Aguilar 2018.{% endblock %}
+{% block document-ready %}
+    {# new trade button behavior #}
+    $('#new-trade-id').click(function (){
+        window.location =  "{% url 'new_trade' %}"
+    });
+
+    {# intro default behavior #}
+    function keyDown(e) {
+        var keyCode = e.keyCode;
+        if(keyCode==13) {
+            $('#new-trade-id').click();
+        }
+    }   
+    document.addEventListener("keydown", keyDown, false);
+
+    {# loads booked trades #}
+    getBookedTrades($('#booked-trades'));
+{% endblock document-ready%}

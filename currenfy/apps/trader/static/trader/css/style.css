@@ -1,3 +1,74 @@
+#new-trade {
+    padding-left: 12em;
+    max-width: 45em;
+}
+
+.has-error{
+    color: #F33;
+}
+
+.container {
+    padding-top: 0em;
+}
+
+.hr-legend {
+    width: 30em;
+    border: 3px solid #000;
+    width: 98%;
+    float: left;
+    margin-top: 0.5em;
+    margin-bottom: 2em;
+}
+
+.rule {
+    height: 20px;
+}
+
+.booked-trade-header > div {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFF;
+    background-color: #333;
+}
+
+.booked-trade-row > div {
+    padding: 0.5em;
+}
+
+.booked-trade-row-even > div {
+    background-color: #FFF;
+}
+
+.booked-trade-row-odd > div {
+    background-color: #EEE;
+}
+
+.col-left > div {
+    text-align: left;
+}
+
+.col-center > div {
+    text-align: center;
+}
+
+.form-control,
+.btn {
+    border-radius: 0px;
+    border-color: #000;
+}
+
+#booked-trades {
+    padding-left: 0em;
+    max-width: 85em;
+}
+
+.currency-selec {
+    width: auto;
+}
+
 html, body {
     height: 100%;
     margin: 0;
