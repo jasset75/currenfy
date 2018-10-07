@@ -25,14 +25,25 @@
   
     <div class="push-bottom"></div>
     </div>
-    <footer class="footer">{% block footer %}{% endblock %}</footer>    
-    <!-- SCRIPTS -->
+    <footer class="footer">{% block footer %}Copyright 2018. Juan A. Aguilar.{% endblock %}</footer>    
+    <!-- Currenfy Library -->
+    <script type="text/javascript" src="{% static 'currenfy/js/currenfy.js' %}"></script>
     <!-- JQuery -->
     <script type="text/javascript" src="{% static 'trader/js/jquery-3.3.1.min.js' %}"></script>
+    <!-- JQuery validator plugin -->
+    <script type="text/javascript" src="{% static 'trader/js/jquery.validate.min.js' %}"></script>    
     <!-- Bootstrap tooltips -->
     <script type="text/javascript" src="{% static 'trader/js/popper.min.js' %}"></script>
     <!-- Bootstrap core JavaScript -->
     <script type="text/javascript" src="{% static 'trader/bootstrap-4.0.0-dist/js/bootstrap.min.js' %}"></script>
+    {# scripts child hook #}
+    <script type="text/javascript">
+    $(document).ready(function(){
+        {% block document-ready %}{% endblock document-ready %}
+    });
+    </script>
+    {% block scripts-hook %}{% endblock scripts-hook %}
+
 </body>
 
 </html>
