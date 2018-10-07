@@ -36,6 +36,9 @@ class SymbolsView(ListAPIView):
         return Response(content, status.HTTP_200_OK)
 
 
+def rate_without_params():
+    raise Exception('Not allowed get rate without currency exchange symbols.')
+
 class RateView(ListAPIView):
     """
         Implements fixer services interface for booking trades
@@ -53,6 +56,7 @@ class RateView(ListAPIView):
         if not buy_currency:
             content = {'error': 'Buy currency must be specified.'}
             return Response(content, status.HTTP_400_BAD_REQUEST)
+            
         rate = Converter.get_rate(sell_currency=sell_currency, buy_currency=buy_currency)
         content = {
             'sell_currency': sell_currency,
