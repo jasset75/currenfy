@@ -2,7 +2,6 @@ import json
 import requests
 from django.conf import settings
 
-
 class Converter():
     """
         This class encapsulate Fixer communications
@@ -19,7 +18,6 @@ class Converter():
             Returns a list with available currency symbols
         """
 
-        # gets symbols data in json format
         response = requests.request("GET", cls._symbols_url)
 
         # parsing json to dict
@@ -27,11 +25,18 @@ class Converter():
         if not doc:  # pragma: no cover
             raise Exception('Converter :: Symbols doc is empty.')
 
+        # checks success
+        if not doc.get('success',None):  # pragma: no cover
+            raise Exception('Converter :: Symbols doc has no symbols.')
+        if not doc['success']:
+            raise Exception('Converter :: Symbols call not success.')
+
+        # checks symbols key exists
         symbols = doc.get('symbols',None)
         if not symbols:  # pragma: no cover
             raise Exception('Converter :: Symbols doc has no symbols.')
 
-        return doc['symbols'].keys()
+        return sorted(symbols)
 
     @classmethod
     def get_rate(cls, sell_currency=None, buy_currency=None):
