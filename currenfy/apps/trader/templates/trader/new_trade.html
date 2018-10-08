@@ -231,7 +231,7 @@
 
     $('#create-trade-id').click(function (){
         {# send trade to back-end #}
-        if (postNewTrade($('#new-trade-form'))){
+        if (currenfy.postNewTrade($('#new-trade-form'))){
             // window.location =  "{% url 'booked_trades_list' %}"
             alert("ok")
         }

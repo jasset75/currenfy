@@ -98,7 +98,14 @@ currenfy.getFixerSymbols = function($select){
     });    
 }
 
-function postNewTrade($form){
+currenfy.postNewTrade= function($form){
+    // basic validation
+    if (!currenfy.checkValidCCYSymbol($form.find('#sell-currency').val())){
+        throw "Sell Currency symbol not valid."
+    }
+    if (!currenfy.checkValidCCYSymbol($form.find('#buy-currency').val())){
+        throw "Buy Currency symbol not valid."
+    }
     var res = false;
     var formData = {
         "sell_currency": $form.find('#sell-currency').val(),
@@ -108,7 +115,7 @@ function postNewTrade($form){
         "csrfmiddlewaretoken": $form.children('input[name=csrfmiddlewaretoken]').val(),
     }
 
-    $.post($form.attr('currenfy-action'), formData).done(function(data){
+    $.post($form.attr('currenfy-action'), formData, function(data){
         res = true;
         alert( "Data Loaded: " + data );
     });
