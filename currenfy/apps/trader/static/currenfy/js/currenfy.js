@@ -70,7 +70,6 @@ function getRate($rate, sell_ccy, buy_ccy){
     }).then(function(data) {
         $rate.val(data['rate'].format(2, 3, '.', ','));
     });    
-
 }
 
 /**
@@ -92,6 +91,23 @@ function getFixerSymbols($select){
             $select.append($option);
         });
     });    
+}
+
+function postNewTrade($form){
+    var res = false;
+    var formData = {
+        "sell_currency": $form.find('#sell-currency').val(),
+        "sell_amount": parseCurrencyValue($form.find('#sell-amount').val()).toString(),
+        "buy_currency": $form.find('#buy-currency').val(),
+        "rate": parseCurrencyValue($form.find('#rate').val()).toString(),
+        "csrfmiddlewaretoken": $form.children('input[name=csrfmiddlewaretoken]').val(),
+    }
+
+    $.post($form.attr('currenfy-action'), formData).done(function(data){
+        res = true;
+        alert( "Data Loaded: " + data );
+    });
+    return res;
 }
 
 /**

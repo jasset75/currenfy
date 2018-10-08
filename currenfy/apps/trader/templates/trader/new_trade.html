@@ -4,7 +4,7 @@
 
 {% block content %}
 <div id='new-trade'>
-    <form id="new-trade-form" action={% url 'booked-list' %}>
+    <form id="new-trade-form" currenfy-action={% url 'booked-list' %} method="POST">{% csrf_token %}
         <fieldset>
             <div class="container">
                 {# row header #}
@@ -103,8 +103,7 @@
                         <div class='form-group'>
                             <div>
                                 <button 
-                                    id="create-trade-id" 
-                                    type="submit"  
+                                    id="create-trade-id"
                                     class="btn btn-dark" disabled>Create</button> 
                             </div>
                         </div>
@@ -181,6 +180,7 @@
     });
 
     {# CCY sell and buy on change to get rate #}
+
     function rateThis(sell_ccy, buy_ccy) {
         if (checkValidCCYSymbol(sell_ccy)){
             if (checkValidCCYSymbol(buy_ccy)){
@@ -232,19 +232,24 @@
 
     $('#create-trade-id').click(function (){
         {# send trade to back-end #}
-        $('#new-trade-form').submit();
-        // $('#cancel-id').click();
+        if (postNewTrade($('#new-trade-form'))){
+            // window.location =  "{% url 'booked_trades_list' %}"
+            alert("ok")
+        }
     });
 
     {# keys default behavior #}
-    function keyDown(e) {
+    function keyUp(e) {
         var keyCode = e.keyCode;
-        if (keyCode==13) {
+
+        if (keyCode==13) {  
             $('#create-trade-id').click();
         } else if (keyCode==27){
             $('#cancel-id').click();
         }
+        {# prevents propagate event #}
+        e.preventDefault();
     }   
-    document.addEventListener("keydown", keyDown, false);
+    document.addEventListener("keyup", keyUp, false);
 
 {% endblock document-ready%}
