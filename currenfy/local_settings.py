@@ -129,12 +129,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
-    'DATETIME_FORMAT': '%m/%d/%Y %H:%M:%S'
+    'DATETIME_FORMAT': '%d/%m/%Y %H:%M:%S'
 }
 
 """
     Project Settings
 """
+# l10n settings
+
+USE_THOUSAND_SEPARATOR = True
+THOUSAND_SEPARATOR = '.'
+DECIMAL_SEPARATOR = ','
 
 # booked trades model
 ID_HEADER = 'TR'

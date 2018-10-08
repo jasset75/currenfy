@@ -86,7 +86,9 @@ class Converter():
         elif buy_currency == settings.BASE_CURRENCY:  # base currency is the buyer, buy_rate is 1
             exchange_rate = 1/sell_rate
         else:
-            exchange_rate = sell_rate*buy_rate # sell and buy currencies are not the base currency
+            # with first multiplier converts to base currency and converts 
+            # to final currency with the second
+            exchange_rate = buy_rate*(1/sell_rate)  # sell and buy currencies are not the base currency
 
         # apply rate precision
         return round(exchange_rate, settings.RATE_DECIMAL_PRECISION)

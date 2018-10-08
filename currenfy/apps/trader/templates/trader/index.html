@@ -6,7 +6,7 @@
 <div>
     <div 
         id="booked-trades" 
-        class="container"
+        class="container-fluid"
         data-source="{% url 'booked-list' %}">
         {# row header #}
         <div class="row">
@@ -17,8 +17,10 @@
         </div>
     
         <div class="row">
-            <div class="col-sm-2 col-sm-pull-10">
-                <button id="new-trade-id" class="btn btn-dark">New Trade</button> 
+            <div class="col-sm-10">
+            </div>
+            <div class="col-sm-2">
+                <button id="new-trade-id" class="btn btn-dark float-sm-right">New Trade</button> 
             </div>
         </div>
         <div class="rule"></div>
@@ -48,7 +50,7 @@
 
 {% block scripts-hook %}
 <script type="text/javascript">
-    // alert('checkpoint 1')
+    // alert('checkpoint')
 </script>
 {% endblock scripts-hook %}
 

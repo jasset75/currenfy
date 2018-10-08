@@ -1,23 +1,80 @@
+/**
+ *  Join url from parts, only valid to http protocol
+ * 
+ * @param {string[]} parts - join url parts with slash
+ */
+function joinUrlParts(parts){
+    return parts.join('/').replace(RegExp('/+','g'),'/')
+         .replace('http:/','http://');
+}
 
 /**
+ *   Format number into string representation with n decimals,
+ *      decimal and thousand separator
+ * 
+ * @param {integer} n - length of decimal
+ * @param {integer} x - length of whole part
+ * @param {string} s - sections delimiter
+ * @param {string} c - decimal delimiter
+ */
+Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x||3) + '})+' +(n >0 ? '\\D' : '$') + ')'
+    var num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+}
+
+/**
+ *  Returns a parsed float value from string with decimal and thousand separator
+ * 
+ * @param {string} value - string of number representation
+ */
+function parseCurrencyValue(value){
+
+    var num = parseFloat(value.replace(/\./g, '').replace(/,/g,'.'));
+    return (num != Number.NaN) ? num : '';
+
+}
+
+/**
+ *  Checks well-formed Currency Symbol
+ * 
+ * @param {string} ccy - Currency symbol: EUR, GBP, USD, etc.
+ */
+function checkValidCCYSymbol(ccy){
+    var re_valid_ccy = /\b[A-Z]{3}\b/;
+
+    return ccy.match(re_valid_ccy)
+}
+
+/**
+ * Gets exchange rate from API REST currenfy source (powered by fixer.io)
  * 
  * @param {object} $rate - input to fill with result
  * @param {string} sell_ccy - Currency Sell Symbol
  * @param {string} buy_ccy - Currency Buy Symbol
  */
 function getRate($rate, sell_ccy, buy_ccy){
-    var rateURL = $rate.attr('data-source');
-    alert(rateURL);
+    // basic validation
+    if (!checkValidCCYSymbol(sell_ccy)){
+        throw "Sell Currency symbol not valid."
+    }
+    if (!checkValidCCYSymbol(buy_ccy)){
+        throw "Buy Currency symbol not valid."
+    }
+    // assembling the url
+    var rateURL = joinUrlParts([$rate.attr('data-source'), sell_ccy, buy_ccy]);
     // loading CCY Symbols
     $.ajax({
         url: rateURL
     }).then(function(data) {
-        $rate.value(data['rate']);
+        $rate.val(data['rate'].format(2, 3, '.', ','));
     });    
 
 }
 
 /**
+ *  Gets list of currency symbols from API REST currenfy source (powered by fixer.io)
  * 
  * @param {object} $select - form select to load symbols
  */
@@ -38,20 +95,7 @@ function getFixerSymbols($select){
 }
 
 /**
- * 
- * @param {integer} n - length of decimal
- * @param {integer} x - length of whole part
- * @param {string} s - sections delimiter
- * @param {string} c - decimal delimiter
- */
-Number.prototype.format = function(n, x, s, c) {
-    var re = '\\d(?=(\\d{' + (x||3) + '})+' +(n >0 ? '\\D' : '$') + ')'
-    var num = this.toFixed(Math.max(0, ~~n));
-
-    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
-}
-
-/**
+ *  Gets booked trades from API REST currenfy source
  * 
  * @param {object} $bookedTrades table-div to add booked trades as rows
  */
