@@ -43,7 +43,7 @@
 }
 
 .booked-trade-row-odd > div {
-    background-color: #EEE;
+    background-color: #ddd;
 }
 
 .col-left > div {
@@ -62,7 +62,7 @@
 
 #booked-trades {
     padding-left: 0em;
-    max-width: 85em;
+    max-width: 95%;
 }
 
 .currency-selec {
