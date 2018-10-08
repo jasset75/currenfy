@@ -23,9 +23,9 @@ currenfy.joinUrlParts = function (parts){
  * @param {string} c - decimal delimiter
  */
 Number.prototype.format = function(n, x, s, c) {
+
     var re = '\\d(?=(\\d{' + (x||3) + '})+' +(n >0 ? '\\D' : '$') + ')'
     var num = this.toFixed(Math.max(0, ~~n));
-
     return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
 }
 
@@ -38,7 +38,6 @@ currenfy.parseCurrencyValue = function(value){
 
     var num = parseFloat(value.replace(/\./g, '').replace(/,/g,'.'));
     return (num != Number.NaN) ? num : '';
-
 }
 
 /**
@@ -47,8 +46,8 @@ currenfy.parseCurrencyValue = function(value){
  * @param {string} ccy - Currency symbol: EUR, GBP, USD, etc.
  */
 currenfy.checkValidCCYSymbol = function(ccy){
-    var re_valid_ccy = /\b[A-Z]{3}\b/;
 
+    var re_valid_ccy = /\b[A-Z]{3}\b/;
     return ccy.match(re_valid_ccy)
 }
 
@@ -114,7 +113,7 @@ currenfy.postNewTrade= function($form){
         "rate": currenfy.parseCurrencyValue($form.find('#rate').val()).toString(),
         "csrfmiddlewaretoken": $form.children('input[name=csrfmiddlewaretoken]').val(),
     }
-
+    // post trade
     $.post($form.attr('currenfy-action'), formData, function(data){
         res = true;
         alert( "Data Loaded: " + data );
