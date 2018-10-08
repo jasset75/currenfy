@@ -135,9 +135,9 @@
 
 {% block document-ready %}
     {# form validation #}
-    $.validator.addMethod("ccy_currency_validator", function(value, element) {
-        return 
-    }, "Two currency selectors must be specified.");
+    $.validator.addMethod("number-float-validator", function(value, element) {
+        return true
+    }, "");
 
     $( "#new-trade-form" ).validate( {
         rules: {
@@ -156,7 +156,6 @@
         },
         errorElement: "em",
         errorPlacement: function ( error, element ) {
-            // Add the `help-block` class to the error element
             error.addClass( "help-block" );
 
             if ( element.prop( "type" ) === "checkbox" ) {
@@ -176,46 +175,46 @@
     {# loads ccy symbols #}
     $('select[data-source]').each(function() {
         $select = $(this)
-        getFixerSymbols($select);
+        currenfy.getFixerSymbols($select);
     });
 
     {# CCY sell and buy on change to get rate #}
 
     function rateThis(sell_ccy, buy_ccy) {
-        if (checkValidCCYSymbol(sell_ccy)){
-            if (checkValidCCYSymbol(buy_ccy)){
-                getRate($('#rate'), sell_ccy, buy_ccy);
+        if (currenfy.checkValidCCYSymbol(sell_ccy)){
+            if (currenfy.checkValidCCYSymbol(buy_ccy)){
+                currenfy.getRate($('#rate'), sell_ccy, buy_ccy);
             }
         }
     }
 
     $('#sell-currency').change(function() {
-        // reset buy amount
+        {# reset buy amount #}
         $('#buy_amount').val('');
-        // retrive rate
+        {# retrive rate #}
         rateThis($('#sell-currency').val(), $('#buy-currency').val());
     });
 
     $('#buy-currency').change(function() {
-        // reset buy amount
+        {# reset buy amount #}
         $('#buy_amount').val('');
-        // retrive rate
+        {# retrive rate #}
         rateThis($('#sell-currency').val(), $('#buy-currency').val());
     });
 
     $('#sell-amount').change(function() {
-        //disable create button
+        {# disable create button #}
         $('#create-trade-id').prop('disabled',true);
-        // reset value
+        {# reset value #}
         $('#buy-amount').val('');
-        // calculates buy amount 
-        var sell_amount = parseCurrencyValue(this.value);
+        {# calculates buy amount #}
+        var sell_amount = currenfy.parseCurrencyValue(this.value);
         if (sell_amount) {
             var sell_ccy = $('#sell-currency').val();
             var buy_ccy = $('#buy-currency').val();
-            if (checkValidCCYSymbol(sell_ccy)){
-                if (checkValidCCYSymbol(buy_ccy)){
-                    var exchange_rate = parseCurrencyValue($('#rate').val());
+            if (currenfy.checkValidCCYSymbol(sell_ccy)){
+                if (currenfy.checkValidCCYSymbol(buy_ccy)){
+                    var exchange_rate = currenfy.parseCurrencyValue($('#rate').val());
                     var buy_amount = sell_amount*exchange_rate;
                     $('#buy-amount').val(buy_amount.format(2, 3, '.', ','));
                     $('#create-trade-id').prop('disabled',false);

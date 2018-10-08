@@ -1,9 +1,14 @@
 /**
+ * currenfy namespace 
+ */
+var currenfy = currenfy || {};
+
+/**
  *  Join url from parts, only valid to http protocol
  * 
  * @param {string[]} parts - join url parts with slash
  */
-function joinUrlParts(parts){
+currenfy.joinUrlParts = function (parts){
     return parts.join('/').replace(RegExp('/+','g'),'/')
          .replace('http:/','http://');
 }
@@ -29,7 +34,7 @@ Number.prototype.format = function(n, x, s, c) {
  * 
  * @param {string} value - string of number representation
  */
-function parseCurrencyValue(value){
+currenfy.parseCurrencyValue = function(value){
 
     var num = parseFloat(value.replace(/\./g, '').replace(/,/g,'.'));
     return (num != Number.NaN) ? num : '';
@@ -41,7 +46,7 @@ function parseCurrencyValue(value){
  * 
  * @param {string} ccy - Currency symbol: EUR, GBP, USD, etc.
  */
-function checkValidCCYSymbol(ccy){
+currenfy.checkValidCCYSymbol = function(ccy){
     var re_valid_ccy = /\b[A-Z]{3}\b/;
 
     return ccy.match(re_valid_ccy)
@@ -54,16 +59,16 @@ function checkValidCCYSymbol(ccy){
  * @param {string} sell_ccy - Currency Sell Symbol
  * @param {string} buy_ccy - Currency Buy Symbol
  */
-function getRate($rate, sell_ccy, buy_ccy){
+currenfy.getRate = function ($rate, sell_ccy, buy_ccy){
     // basic validation
-    if (!checkValidCCYSymbol(sell_ccy)){
+    if (!currenfy.checkValidCCYSymbol(sell_ccy)){
         throw "Sell Currency symbol not valid."
     }
-    if (!checkValidCCYSymbol(buy_ccy)){
+    if (!currenfy.checkValidCCYSymbol(buy_ccy)){
         throw "Buy Currency symbol not valid."
     }
     // assembling the url
-    var rateURL = joinUrlParts([$rate.attr('data-source'), sell_ccy, buy_ccy]);
+    var rateURL = currenfy.joinUrlParts([$rate.attr('data-source'), sell_ccy, buy_ccy]);
     // loading CCY Symbols
     $.ajax({
         url: rateURL
@@ -77,7 +82,7 @@ function getRate($rate, sell_ccy, buy_ccy){
  * 
  * @param {object} $select - form select to load symbols
  */
-function getFixerSymbols($select){
+currenfy.getFixerSymbols = function($select){
     // loading CCY Symbols
     $.ajax({
         url: $select.attr('data-source')
@@ -97,9 +102,9 @@ function postNewTrade($form){
     var res = false;
     var formData = {
         "sell_currency": $form.find('#sell-currency').val(),
-        "sell_amount": parseCurrencyValue($form.find('#sell-amount').val()).toString(),
+        "sell_amount": currenfy.parseCurrencyValue($form.find('#sell-amount').val()).toString(),
         "buy_currency": $form.find('#buy-currency').val(),
-        "rate": parseCurrencyValue($form.find('#rate').val()).toString(),
+        "rate": currenfy.parseCurrencyValue($form.find('#rate').val()).toString(),
         "csrfmiddlewaretoken": $form.children('input[name=csrfmiddlewaretoken]').val(),
     }
 
@@ -115,7 +120,7 @@ function postNewTrade($form){
  * 
  * @param {object} $bookedTrades table-div to add booked trades as rows
  */
-function getBookedTrades($bookedTrades){
+currenfy.getBookedTrades = function($bookedTrades){
     function appendBookedTrade($row, item, even){
         var sell_amount = parseFloat(item['sell_amount']).format(2, 3, '.', ',');
         var buy_amount = parseFloat(item['buy_amount']).format(2, 3, '.', ',');
