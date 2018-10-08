@@ -1,5 +1,10 @@
 
-
+/**
+ * 
+ * @param {object} $rate - input to fill with result
+ * @param {string} sell_ccy - Currency Sell Symbol
+ * @param {string} buy_ccy - Currency Buy Symbol
+ */
 function getRate($rate, sell_ccy, buy_ccy){
     var rateURL = $rate.attr('data-source');
     alert(rateURL);
@@ -14,7 +19,7 @@ function getRate($rate, sell_ccy, buy_ccy){
 
 /**
  * 
- * @param {*} $select form select to load symbols
+ * @param {object} $select - form select to load symbols
  */
 function getFixerSymbols($select){
     // loading CCY Symbols
@@ -34,10 +39,27 @@ function getFixerSymbols($select){
 
 /**
  * 
- * @param {*} $bookedTrades table-div to add booked trades as rows
+ * @param {integer} n - length of decimal
+ * @param {integer} x - length of whole part
+ * @param {string} s - sections delimiter
+ * @param {string} c - decimal delimiter
+ */
+Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x||3) + '})+' +(n >0 ? '\\D' : '$') + ')'
+    var num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+}
+
+/**
+ * 
+ * @param {object} $bookedTrades table-div to add booked trades as rows
  */
 function getBookedTrades($bookedTrades){
     function appendBookedTrade($row, item, even){
+        var sell_amount = parseFloat(item['sell_amount']).format(2, 3, '.', ',');
+        var buy_amount = parseFloat(item['buy_amount']).format(2, 3, '.', ',');
+        var rate = parseFloat(item['rate']).format(4, 3, '.', ',');
         // Sell CCY
         var $sell_currency = $('<div></div>')
             .addClass('col-sm-2')
@@ -48,7 +70,7 @@ function getBookedTrades($bookedTrades){
         var $sell_amount = $('<div></div>')
             .addClass('col-sm-2')
             .addClass('col-left')
-            .text(item['sell_amount']);
+            .text(sell_amount);
         $row.append($sell_amount);
         // Buy CCY
         var $buy_currency = $('<div></div>')
@@ -60,13 +82,13 @@ function getBookedTrades($bookedTrades){
         var $buy_amount = $('<div></div>')
             .addClass('col-sm-2')
             .addClass('col-left')
-            .text(item['buy_amount']);
+            .text(buy_amount);
         $row.append($buy_amount);
         // Rate
         var $rate = $('<div></div>')
             .addClass('col-sm-2')
             .addClass('col-left')
-            .text(item['rate']);
+            .text(rate);
         $row.append($rate);
         // Date Booked
         var $date_booked = $('<div></div>')
