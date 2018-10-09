@@ -73,7 +73,9 @@ currenfy.getRate = function ($rate, sell_ccy, buy_ccy, callback){
         url: rateURL
     }).then(function(data) {
         $rate.val(data['rate'].format(2, 3, '.', ','));
-        callback();
+        if (typeof callback == 'function'){
+            callback();
+        }
     });    
 }
 
@@ -98,7 +100,7 @@ currenfy.getFixerSymbols = function($select){
     });    
 }
 
-currenfy.postNewTrade= function($form){
+currenfy.postNewTrade= function($form, doneCallback, failCallback){
     // basic validation
     if (!currenfy.checkValidCCYSymbol($form.find('#sell-currency').val())){
         throw "Sell Currency symbol not valid."
@@ -106,7 +108,7 @@ currenfy.postNewTrade= function($form){
     if (!currenfy.checkValidCCYSymbol($form.find('#buy-currency').val())){
         throw "Buy Currency symbol not valid."
     }
-    var res = false;
+    // collecting data
     var formData = {
         "sell_currency": $form.find('#sell-currency').val(),
         "sell_amount": currenfy.parseCurrencyValue($form.find('#sell-amount').val()).toString(),
@@ -115,10 +117,17 @@ currenfy.postNewTrade= function($form){
         "csrfmiddlewaretoken": $form.children('input[name=csrfmiddlewaretoken]').val(),
     }
     // post trade
-    $.post($form.attr('currenfy-action'), formData).done(function(){
-        res = true;
-        alert( "Data Loaded");
-    });
+    $.post($form.attr('currenfy-action'), formData)
+        .done(function(){
+            if (typeof doneCallback == 'function'){
+                doneCallback();
+            }
+        })
+        .fail(function(){
+            if (typeof failCallback == 'function'){
+                failCallback();
+            }
+        });
     return res;
 }
 
