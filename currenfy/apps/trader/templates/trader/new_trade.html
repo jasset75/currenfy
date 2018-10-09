@@ -4,7 +4,7 @@
 
 {% block content %}
 <div id='new-trade'>
-    <form id="new-trade-form" currenfy-action={% url 'booked-list' %} method="POST">{% csrf_token %}
+    <form id="new-trade-form" currenfy-action="{% url 'booked-list' %}" method="POST">{% csrf_token %}
         <fieldset>
             <div class="container">
                 {# row header #}
@@ -12,6 +12,12 @@
                     <div class="col-sm-12">
                         <legend><b>New Trade</b></legend>
                         <hr class="hr-legend">
+                    </div>
+                </div>
+                {# row error msg #}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <em id="err-msg" class="error help-block"></em>
                     </div>
                 </div>
                 {# row 1 #}
@@ -90,7 +96,8 @@
                                 name="buy_amount"
                                 autocomplete="off"
                                 readonly="true"
-                                required="true">
+                                required="true"
+                                tabindex="-1">
                         </div>
                     </div>
                 </div>
@@ -182,31 +189,45 @@
     function rateThis(sell_ccy, buy_ccy) {
         if (currenfy.checkValidCCYSymbol(sell_ccy)){
             if (currenfy.checkValidCCYSymbol(buy_ccy)){
-                currenfy.getRate($('#rate'), sell_ccy, buy_ccy);
+                currenfy.getRate($('#rate'), sell_ccy, buy_ccy, function(){
+                    doSubmittable(true);
+                });
             }
         }
     }
 
+    $('#err-msg').val('test de mensaje de error.');
+
     function doSubmittable(enable){
         {# disable / enable (if ok) submit button #}
         var submittable = false;
+        $('#err-msg').val('');
 
         if (enable){
             var sell_ccy = $('#sell-currency').val();
             var buy_ccy = $('#buy-currency').val();
             var sell_amount = currenfy.parseCurrencyValue($('#sell-amount').val());
             var exchange_rate = currenfy.parseCurrencyValue($('#rate').val());
-            var buy_amount = currenfy.parseCurrencyValue($('#buy-amount').val());
+
+            // var buy_amount = currenfy.parseCurrencyValue($('#buy-amount').val());
 
             submittable = currenfy.checkValidCCYSymbol(sell_ccy) &&
                           currenfy.checkValidCCYSymbol(buy_ccy) &&
                           (typeof sell_amount == 'number') &&
-                          (typeof buy_amount == 'number') &&
-                          (typeof exchange_rate == 'number');
-        }
+                          (typeof exchange_rate == 'number') &&
+                          !isNaN(sell_amount) &&
+                          !isNaN(exchange_rate);
 
+            if (submittable){
+                var buy_amount = sell_amount*exchange_rate;
+                $('#buy-amount').val(buy_amount.format(2, 3, '.', ','));
+            } else {
+                $('#buy-amount').val('');
+            }
+
+            //$('#new-trade-form').validate();
+        }
         $('#create-trade-id').prop('disabled',!submittable);
-        $('#create-trade-id').focus();
     }
 
     $('#sell-currency').change(function() {
@@ -221,26 +242,18 @@
     $('#buy-currency').change(function() {
         {# disable submit #}
         doSubmittable(false);
-        {# reset buy amount #}
-        $('#buy_amount').val('');
         {# retrive rate #}
         rateThis($('#sell-currency').val(), $('#buy-currency').val());
     });
 
-
     $('#sell-amount').change(function() {
         {# disable create button #}
         doSubmittable(false);
-        {# reset value #}
-        $('#buy-amount').val('');
         {# calculates buy amount #}
         var sell_amount = currenfy.parseCurrencyValue(this.value);
-        if (sell_amount) {
-            var exchange_rate = currenfy.parseCurrencyValue($('#rate').val());
-            var buy_amount = sell_amount*exchange_rate;
-            $('#buy-amount').val(buy_amount.format(2, 3, '.', ','));
-            doSubmittable(true);
-        }
+        var exchange_rate = currenfy.parseCurrencyValue($('#rate').val());
+
+        doSubmittable(true);
     });
 
     {# instantiate action buttons #}

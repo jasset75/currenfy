@@ -58,7 +58,7 @@ currenfy.checkValidCCYSymbol = function(ccy){
  * @param {string} sell_ccy - Currency Sell Symbol
  * @param {string} buy_ccy - Currency Buy Symbol
  */
-currenfy.getRate = function ($rate, sell_ccy, buy_ccy){
+currenfy.getRate = function ($rate, sell_ccy, buy_ccy, callback){
     // basic validation
     if (!currenfy.checkValidCCYSymbol(sell_ccy)){
         throw "Sell Currency symbol not valid."
@@ -73,6 +73,7 @@ currenfy.getRate = function ($rate, sell_ccy, buy_ccy){
         url: rateURL
     }).then(function(data) {
         $rate.val(data['rate'].format(2, 3, '.', ','));
+        callback();
     });    
 }
 
@@ -114,9 +115,9 @@ currenfy.postNewTrade= function($form){
         "csrfmiddlewaretoken": $form.children('input[name=csrfmiddlewaretoken]').val(),
     }
     // post trade
-    $.post($form.attr('currenfy-action'), formData, function(data){
+    $.post($form.attr('currenfy-action'), formData).done(function(){
         res = true;
-        alert( "Data Loaded: " + data );
+        alert( "Data Loaded");
     });
     return res;
 }
