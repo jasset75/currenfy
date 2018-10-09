@@ -72,7 +72,7 @@ currenfy.getRate = function ($rate, sell_ccy, buy_ccy, callback){
     $.ajax({
         url: rateURL
     }).then(function(data) {
-        $rate.val(data['rate'].format(2, 3, '.', ','));
+        $rate.val(data['rate'].format({{ rate_precision }}, 3, '.', ','));
         if (typeof callback == 'function'){
             callback();
         }
@@ -118,7 +118,7 @@ currenfy.postNewTrade= function($form, doneCallback, failCallback){
     }
     // post trade
     $.post($form.attr('currenfy-action'), formData)
-        .done(function(){
+        .then(function(){
             if (typeof doneCallback == 'function'){
                 doneCallback();
             }

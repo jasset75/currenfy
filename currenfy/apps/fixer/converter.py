@@ -71,12 +71,12 @@ class Converter():
             raise Exception('Converter :: Latest rates doc has no rates.')
 
         # checks if sell currency has exchange rate
-        sell_rate = rates.get(sell_currency,None)
+        sell_rate = rates.get(sell_currency, None)
         if not sell_rate:  # pragma: no cover
             raise Exception('Converter :: Sell rate exchange for "{}" currency not found.'.format(sell_currency))
 
         # checks if buy currency has exchange rate
-        buy_rate = rates.get(buy_currency,None)
+        buy_rate = rates.get(buy_currency, None)
         if not buy_rate:  # pragma: no cover
             raise Exception('Converter :: Buy rate exchange for "{}" currency not found.'.format(sell_currency))
 
