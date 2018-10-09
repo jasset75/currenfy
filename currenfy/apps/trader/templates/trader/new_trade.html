@@ -260,9 +260,7 @@
     $('#create-trade-id').click(function (){
         {# send trade to back-end #}
         currenfy.postNewTrade($('#new-trade-form'), function(){
-            // window.location =  "{% url 'booked_trades_list' %}"
-            $('#err-msg').val('');
-            alert("ok");
+            window.location =  "{% url 'booked_trades_list' %}"
         });
     });
 
