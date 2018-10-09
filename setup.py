@@ -18,8 +18,11 @@ install it on Python {}.{}
 """.format(*(REQUIRED_PYTHON + CURRENT_PYTHON)))
     sys.exit(1)
 
-with open('./requirements-prod.txt') as f:
+req_filename = './requirements-prod.txt'
+
+with open(req_filename) as f:
     install_requires = f.read().strip().split('\n')
+
 
 
 setup(
