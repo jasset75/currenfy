@@ -90,8 +90,7 @@
                                 name="buy_amount"
                                 autocomplete="off"
                                 readonly="true"
-                                required="true"
-                                tabindex="-1">
+                                required="true">
                         </div>
                     </div>
                 </div>
@@ -188,7 +187,31 @@
         }
     }
 
+    function doSubmittable(enable){
+        {# disable / enable (if ok) submit button #}
+        var submittable = false;
+
+        if (enable){
+            var sell_ccy = $('#sell-currency').val();
+            var buy_ccy = $('#buy-currency').val();
+            var sell_amount = currenfy.parseCurrencyValue($('#sell-amount').val());
+            var exchange_rate = currenfy.parseCurrencyValue($('#rate').val());
+            var buy_amount = currenfy.parseCurrencyValue($('#buy-amount').val());
+
+            submittable = currenfy.checkValidCCYSymbol(sell_ccy) &&
+                          currenfy.checkValidCCYSymbol(buy_ccy) &&
+                          (typeof sell_amount == 'number') &&
+                          (typeof buy_amount == 'number') &&
+                          (typeof exchange_rate == 'number');
+        }
+
+        $('#create-trade-id').prop('disabled',!submittable);
+        $('#create-trade-id').focus();
+    }
+
     $('#sell-currency').change(function() {
+        {# disable submit #}
+        doSubmittable(false);
         {# reset buy amount #}
         $('#buy_amount').val('');
         {# retrive rate #}
@@ -196,35 +219,33 @@
     });
 
     $('#buy-currency').change(function() {
+        {# disable submit #}
+        doSubmittable(false);
         {# reset buy amount #}
         $('#buy_amount').val('');
         {# retrive rate #}
         rateThis($('#sell-currency').val(), $('#buy-currency').val());
     });
 
+
     $('#sell-amount').change(function() {
         {# disable create button #}
-        $('#create-trade-id').prop('disabled',true);
+        doSubmittable(false);
         {# reset value #}
         $('#buy-amount').val('');
         {# calculates buy amount #}
         var sell_amount = currenfy.parseCurrencyValue(this.value);
         if (sell_amount) {
-            var sell_ccy = $('#sell-currency').val();
-            var buy_ccy = $('#buy-currency').val();
-            if (currenfy.checkValidCCYSymbol(sell_ccy)){
-                if (currenfy.checkValidCCYSymbol(buy_ccy)){
-                    var exchange_rate = currenfy.parseCurrencyValue($('#rate').val());
-                    var buy_amount = sell_amount*exchange_rate;
-                    $('#buy-amount').val(buy_amount.format(2, 3, '.', ','));
-                    $('#create-trade-id').prop('disabled',false);
-                }
-            }
+            var exchange_rate = currenfy.parseCurrencyValue($('#rate').val());
+            var buy_amount = sell_amount*exchange_rate;
+            $('#buy-amount').val(buy_amount.format(2, 3, '.', ','));
+            doSubmittable(true);
         }
     });
 
     {# instantiate action buttons #}
     $('#cancel-id').click(function (){
+        doSubmittable(false);
         {# back link to booked trades list #}
         window.location =  "{% url 'booked_trades_list' %}"
     });
@@ -241,9 +262,7 @@
     function keyUp(e) {
         var keyCode = e.keyCode;
 
-        if (keyCode==13) {  
-            $('#create-trade-id').click();
-        } else if (keyCode==27){
+        if (keyCode==27){
             $('#cancel-id').click();
         }
         {# prevents propagate event #}
