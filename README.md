@@ -20,7 +20,7 @@ cd currenfy
 cp local_settings.py settings.py
 pip install .
 ```
-> change `Debug=False
+> change `Debug=False`
 > change `SECRET_KEY` to a production enviroment key
 
 
