@@ -16,8 +16,8 @@ pip install .
 * Installing django app
 ```sh
 git clone https://github.com/jasset75/currenfy.git
-cp local_settings.py settings.py
 cd currenfy
+cp local_settings.py settings.py
 pip install .
 ```
 > change `Debug=False
