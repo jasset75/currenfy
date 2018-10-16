@@ -2,6 +2,7 @@ import json
 import requests
 from django.conf import settings
 
+
 class Converter():
     """
         This class encapsulate Fixer communications
@@ -26,13 +27,13 @@ class Converter():
             raise Exception('Converter :: Symbols doc is empty.')
 
         # checks success
-        if not doc.get('success',None):  # pragma: no cover
+        if not doc.get('success', None):  # pragma: no cover
             raise Exception('Converter :: Symbols doc has no symbols.')
         if not doc['success']:
             raise Exception('Converter :: Symbols call not success.')
 
         # checks symbols key exists
-        symbols = doc.get('symbols',None)
+        symbols = doc.get('symbols', None)
         if not symbols:  # pragma: no cover
             raise Exception('Converter :: Symbols doc has no symbols.')
 
@@ -64,7 +65,7 @@ class Converter():
         base = doc.get('base', None)
         if base != settings.BASE_CURRENCY:  # pragma: no cover
             raise Exception('Converter :: Base "{}" currency not expected.'.format(base))
-        
+
         # checks if exists rates
         rates = doc.get('rates', None)
         if not rates:  # pragma: no cover
@@ -84,11 +85,11 @@ class Converter():
         if sell_currency == settings.BASE_CURRENCY:  # buy_rate is already in the base currency
             exchange_rate = buy_rate
         elif buy_currency == settings.BASE_CURRENCY:  # base currency is the buyer, buy_rate is 1
-            exchange_rate = 1/sell_rate
+            exchange_rate = 1 / sell_rate
         else:
-            # with first multiplier converts to base currency and converts 
+            # with first multiplier converts to base currency and converts
             # to final currency with the second
-            exchange_rate = buy_rate*(1/sell_rate)  # sell and buy currencies are not the base currency
+            exchange_rate = buy_rate * (1 / sell_rate)  # sell and buy currencies are not the base currency
 
         # apply rate precision
         return round(exchange_rate, settings.RATE_DECIMAL_PRECISION)

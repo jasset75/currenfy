@@ -4,7 +4,6 @@ from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
-from rest_framework.decorators import api_view, renderer_classes
 from rest_framework import status
 from .serializers import BookedTradesSerializer
 
@@ -25,7 +24,7 @@ class SymbolsView(ListAPIView):
         """
             Returns list of allowed currency symbols.
         """
-        
+
         self.renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
         symbols = Converter.get_symbols()
@@ -39,6 +38,7 @@ class SymbolsView(ListAPIView):
 def rate_without_params():
     raise Exception('Not allowed get rate without currency exchange symbols.')
 
+
 class RateView(ListAPIView):
     """
         Implements fixer services interface for booking trades
@@ -47,7 +47,7 @@ class RateView(ListAPIView):
         """
             Gets exchange rate between `sell_currency` and `buy_currency`.
         """
-        
+
         self.renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
         if not sell_currency:
@@ -56,7 +56,7 @@ class RateView(ListAPIView):
         if not buy_currency:
             content = {'error': 'Buy currency must be specified.'}
             return Response(content, status.HTTP_400_BAD_REQUEST)
-            
+
         rate = Converter.get_rate(sell_currency=sell_currency, buy_currency=buy_currency)
         content = {
             'sell_currency': sell_currency,

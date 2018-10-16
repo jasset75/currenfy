@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import BookedTrades
 
+
 # Booked Trades Admin
 @admin.register(BookedTrades)
 class BookedTradesAdmin(admin.ModelAdmin):

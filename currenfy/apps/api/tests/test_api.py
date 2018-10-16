@@ -1,10 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
-# from rest_framework.test import APITestCase
 from currenfy.common import CurrenfyTest
-from api.serializers import BookedTradesSerializer
 from booked.models import BookedTrades
-from django.conf import settings
 
 TRADES = [
     {
@@ -12,7 +9,7 @@ TRADES = [
         "sell_amount": "1000.00",
         "buy_currency": "GBP",
         "rate": "0.8900",
-    },        
+    },
     {
         "sell_currency": "GBP",
         "sell_amount": "900.00",
@@ -36,6 +33,7 @@ TRADES = [
     }
 ]
 
+
 class ApiTest(CurrenfyTest):
 
     def item_check(self, item):
@@ -55,7 +53,7 @@ class ApiTest(CurrenfyTest):
         self.check_rate(rate)
         self.check_amount(sell_amount)
         self.check_amount(buy_amount)
-        self.assertEqual(buy_amount, sell_amount*rate)
+        self.assertEqual(buy_amount, sell_amount * rate)
 
     def create_booked_trades(self):
         res = []
@@ -75,8 +73,8 @@ class ApiTest(CurrenfyTest):
         # iterates over saved items and verifies that are properly recorded in DB
         for json_trade in saved:
             # queryset first item
-            db_trade = BookedTrades.objects.filter(ID=json_trade.get('ID',None))[0]
-            # model object 
+            db_trade = BookedTrades.objects.filter(ID=json_trade.get('ID', None))[0]
+            # model object
             obj_trade = BookedTrades(**json_trade)
             # checks if the two dictionaries are equals
             # TO-DO: I'm not sure about its goodness
@@ -87,13 +85,13 @@ class ApiTest(CurrenfyTest):
             Test listing booked trades
         """
         # create booked trades for testing
-        saved = self.create_booked_trades()
+        self.create_booked_trades()
         # retrieving booked trades
         response = self.client.get(reverse('booked-list'), format='json')
         booked_trades = response.data
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-        # iterates over listed items and verifies integrity 
+        # iterates over listed items and verifies integrity
         for btr in booked_trades:
             self.item_check(btr)
 
@@ -129,12 +127,12 @@ class ApiTest(CurrenfyTest):
         # checks expected fields
         res_rate = response.data.get('rate', None)
         res_sell_currency = response.data.get('sell_currency', None)
-        res_buy_currency = response.data.get('buy_currency',None)    
+        res_buy_currency = response.data.get('buy_currency', None)
 
         # checks rate is correct
         self.check_rate(float(response.data.get('rate', None)))
 
-        # checks consistency of currencies 
+        # checks consistency of currencies
         self.assertEqual(sell_currency, res_sell_currency)
         self.assertEqual(buy_currency, res_buy_currency)
 

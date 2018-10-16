@@ -1,6 +1,4 @@
-from django.test import TestCase
 from booked.models import BookedTrades
-from django.conf import settings
 from currenfy.common import CurrenfyTest
 
 
@@ -21,7 +19,7 @@ class CruTest(CurrenfyTest):
         # checks ID is ok
         self.check_id(btr.ID)
         # checks if trade have been correctly calculated
-        self.assertEqual(btr.buy_amount, btr.sell_amount*btr.rate)
+        self.assertEqual(btr.buy_amount, btr.sell_amount * btr.rate)
 
     def test_update_booked_trade(self):
         """
@@ -35,13 +33,13 @@ class CruTest(CurrenfyTest):
             rate=1.14
         )
         btr.save()
-        
+
         # checks __str__ is ID
         self.assertEqual(str(btr), btr.ID)
         # checks if trade have been correctly calculated
-        self.assertEqual(btr.buy_amount, btr.sell_amount*btr.rate)
+        self.assertEqual(btr.buy_amount, btr.sell_amount * btr.rate)
         # update
         btr.sell_amount = 1100
         btr.save()
         # checks if trade have been correctly calculated
-        self.assertEqual(btr.buy_amount, btr.sell_amount*btr.rate)
+        self.assertEqual(btr.buy_amount, btr.sell_amount * btr.rate)

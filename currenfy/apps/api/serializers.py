@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 
 class BookedTradesSerializer(serializers.Serializer):
-    
+
     ID = serializers.CharField(read_only=True, max_length=len(settings.ID_HEADER) + settings.ID_LENGTH)
     sell_currency = serializers.CharField(max_length=3, required=True)
     sell_amount = serializers.DecimalField(max_digits=settings.MAX_AMOUNT_LEN, decimal_places=2, required=True)

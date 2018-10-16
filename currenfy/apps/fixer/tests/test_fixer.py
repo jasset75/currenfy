@@ -54,7 +54,7 @@ class FixerTest(TestCase):
         self.assertEqual(doc['base'], 'EUR')
 
         date_ts = datetime.datetime.fromtimestamp(doc['timestamp'])
-        self.assertEqual(date_ts.year,datetime.datetime.today().year)
+        self.assertEqual(date_ts.year, datetime.datetime.today().year)
 
         self.assertTrue(doc['rates']['GBP'])
         self.assertTrue(doc['rates']['USD'])
@@ -78,10 +78,10 @@ class FixerTest(TestCase):
         sell_currency = 'GBP'
         buy_currency = 'USD'
         rate = Converter.get_rate(sell_currency=sell_currency, buy_currency=buy_currency)
-        buy_amount = sell_amount*rate
-        print('{} {} x ({}) {} -> {} {}'.format(sell_amount, sell_currency, 
+        buy_amount = sell_amount * rate
+        print('{} {} x ({}) {} -> {} {}'.format(sell_amount, sell_currency,
                                                 rate,
-                                                buy_currency, 
+                                                buy_currency,
                                                 buy_amount, buy_currency))
         self.assertTrue(buy_amount)
 
@@ -93,10 +93,10 @@ class FixerTest(TestCase):
         sell_currency = 'EUR'
         buy_currency = 'GBP'
         rate = Converter.get_rate(sell_currency=sell_currency, buy_currency=buy_currency)
-        buy_amount = sell_amount*rate
-        print('{} {} x ({}) {} -> {} {}'.format(sell_amount, sell_currency, 
+        buy_amount = sell_amount * rate
+        print('{} {} x ({}) {} -> {} {}'.format(sell_amount, sell_currency,
                                                 rate,
-                                                buy_currency, 
+                                                buy_currency,
                                                 buy_amount, buy_currency))
         self.assertTrue(buy_amount)
 
@@ -108,9 +108,9 @@ class FixerTest(TestCase):
         sell_currency = 'GBP'
         buy_currency = 'EUR'
         rate = Converter.get_rate(sell_currency=sell_currency, buy_currency=buy_currency)
-        buy_amount = sell_amount*rate
-        print('{} {} x ({}) {} -> {} {}'.format(sell_amount, sell_currency, 
+        buy_amount = sell_amount * rate
+        print('{} {} x ({}) {} -> {} {}'.format(sell_amount, sell_currency,
                                                 rate,
-                                                buy_currency, 
+                                                buy_currency,
                                                 buy_amount, buy_currency))
         self.assertTrue(buy_amount)

@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save
 from django.conf import settings
 
+
 # identifier generator to identify Booked Trades
 def g_identifier():
     """
@@ -16,7 +17,9 @@ def g_identifier():
 # Booked Trades of foreign exchange
 class BookedTrades(models.Model):
 
-    ID = models.CharField(primary_key=True, max_length=len(settings.ID_HEADER)+settings.ID_LENGTH, verbose_name='Trade Id.')
+    ID = models.CharField(primary_key=True,
+                          max_length=len(settings.ID_HEADER) + settings.ID_LENGTH,
+                          verbose_name='Trade Id.')
     sell_currency = models.CharField(max_length=3, verbose_name='Sell CCY')
     sell_amount = models.DecimalField(max_digits=settings.MAX_AMOUNT_LEN, decimal_places=2, verbose_name='Sell Amount')
     buy_currency = models.CharField(max_length=3, verbose_name='Buy CCY')

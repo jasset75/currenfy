@@ -1,6 +1,5 @@
-import os
 import sys
-from setuptools import find_packages, setup
+from setuptools import setup
 
 
 CURRENT_PYTHON = sys.version_info[:2]
@@ -22,7 +21,6 @@ req_filename = './requirements-prod.txt'
 
 with open(req_filename) as f:
     install_requires = f.read().strip().split('\n')
-
 
 
 setup(
