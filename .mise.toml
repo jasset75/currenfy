@@ -1,0 +1,16 @@
+[tools]
+python = "3.12"
+
+[env]
+PYTHONPATH = "."
+MISE_EXPERIMENTAL = "true"
+
+_.python.venv = { path = ".venv", create = true }
+
+[tasks.pip]
+description = "Install packages"
+run = "source pip_install.sh"
+
+[hooks.enter]
+shell = "bash"
+script = "source pip_install.sh"
