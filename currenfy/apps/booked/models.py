@@ -51,5 +51,5 @@ def booked_trades_pre_save_handler(sender, instance, *args, **kwargs):
                     collision = False
                 if not collision:
                     instance.ID = id_candidate
-    # consistency asurance
+    # consistency assurance
     instance.buy_amount = instance.sell_amount * instance.rate
