@@ -5,7 +5,7 @@ from . import views
 
 
 router = routers.SimpleRouter()
-router.register(r'booked', views.BookedTradesSet, base_name='booked')
+router.register(r'booked', views.BookedTradesSet, basename='booked')
 
 urlpatterns = [
     path('', include(router.urls)),

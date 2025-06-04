@@ -36,8 +36,12 @@ class SymbolsView(ListAPIView):
         return Response(content, status.HTTP_200_OK)
 
 
-def rate_without_params():
-    raise Exception('Not allowed get rate without currency exchange symbols.')
+def rate_without_params(request):
+    """Return a 400 response when currency symbols are missing."""
+    content = {
+        'error': 'Not allowed get rate without currency exchange symbols.'
+    }
+    return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 class RateView(ListAPIView):
     """
