@@ -43,6 +43,7 @@ class ApiTest(CurrenfyTest):
             checks booked trade is correct
         """
         self.assertTrue(item.get('ID', None))
+        self.check_id(item.get('ID'))
         self.assertTrue(item.get('sell_amount', None))
         self.assertTrue(item.get('sell_currency', None))
         self.assertTrue(item.get('buy_amount', None))
